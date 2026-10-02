@@ -2,10 +2,10 @@ const express=require("express"),cors=require("cors"),path=require("path"),fs=re
 const app=express(),PORT=process.env.PORT||3000,EMAIL="rajlaxmi.revotech@gmail.com",PHONE="9423717855";
 const dir=path.join(__dirname,"data"),file=path.join(dir,"requests.json");
 fs.mkdirSync(dir,{recursive:true}); if(!fs.existsSync(file)) fs.writeFileSync(file,"[]");
-app.use(cors()); app.use(express.json()); app.use(express.urlencoded({extended:true})); app.use(express.static(path.join(__dirname,"public")));
+app.use(cors()); app.use(express.json()); app.use(express.urlencoded({extended:true})); app.use(express.static(path.join(__dirname)));
 const read=()=>{try{return JSON.parse(fs.readFileSync(file,"utf8"))}catch{return[]}};
 app.get("/api/health",(q,r)=>r.json({ok:true,email:EMAIL,phone:PHONE}));
 app.get("/api/contact",(q,r)=>r.json({email:EMAIL,emailUrl:"mailto:"+EMAIL,phone:PHONE,phoneUrl:"tel:+91"+PHONE,whatsappUrl:"https://wa.me/91"+PHONE}));
 app.post("/api/requests",(q,r)=>{const b=q.body||{},x={id:"REQ-"+Date.now(),createdAt:new Date().toISOString(),type:b.formType||"Request",name:String(b.Name||"").trim(),phone:String(b.Phone||"").trim(),email:String(b.Email||"").trim(),service:String(b.Service||b.Category||"").trim(),location:String(b.Location||"").trim(),requirement:String(b.Requirement||b.Scope||"").trim()};if(!x.name||!x.phone||!x.requirement)return r.status(400).json({ok:false,message:"Name, phone and requirement/scope are required."});const a=read();a.push(x);fs.writeFileSync(file,JSON.stringify(a,null,2));r.status(201).json({ok:true,message:"Request saved successfully.",requestId:x.id,contactEmail:EMAIL})});
-app.get("/api/requests",(q,r)=>r.json(read())); app.get("*",(q,r)=>r.sendFile(path.join(__dirname,"public","index.html")));
+app.get("/api/requests",(q,r)=>r.json(read())); app.get("*",(q,r)=>r.sendFile(path.join(__dirname,"index.html")));
 app.listen(PORT,()=>console.log("RAJLAXMI REVATEC running on http://localhost:"+PORT));
