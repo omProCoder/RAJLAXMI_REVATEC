@@ -1,5 +1,5 @@
 const express=require("express"),cors=require("cors"),path=require("path"),fs=require("fs");
-const app=express(),PORT=process.env.PORT||3000,EMAIL="rajlaxmi.revotech@gmail.com",PHONE="9423717855";
+const app=express(),PORT=process.env.PORT||3000,EMAIL="rajlaxmi.revatec@gmail.com",PHONE="9423717855";
 const dir=path.join(__dirname,"data"),file=path.join(dir,"requests.json");
 fs.mkdirSync(dir,{recursive:true}); if(!fs.existsSync(file)) fs.writeFileSync(file,"[]");
 app.use(cors()); app.use(express.json()); app.use(express.urlencoded({extended:true})); app.use(express.static(path.join(__dirname)));
